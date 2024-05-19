@@ -1,0 +1,12 @@
+x = 1
+
+medan x < 10
+      skriv x
+
+      om x > 5 och < 10
+        vänta 1
+      slut
+    x = x + 1
+slut
+
+skriv x

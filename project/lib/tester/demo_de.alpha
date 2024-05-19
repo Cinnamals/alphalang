@@ -1,0 +1,12 @@
+x = 1
+
+während x < 10
+      drucken x
+
+      wenn x > 5 und < 10
+        pause 1
+      ende
+    x = x + 1
+ende
+
+drucken x

@@ -1,0 +1,17 @@
+a = 1
+b = 1
+
+def fib(x)
+  if 2 < x
+
+    temp = a + b
+    a = b
+    b = temp
+
+    fib(x - 1)
+  else
+    b
+  end
+end
+
+print fib(11)

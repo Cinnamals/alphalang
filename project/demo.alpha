@@ -1,0 +1,56 @@
+;; comment
+x = 1
+
+;; function comment header
+def my_func()
+  while x < 6
+    pause(0.1)                ;; annoying pause function
+    if x == 0
+      print 0
+    elseif x == 1
+      print 1
+    elseif x == 2
+      print 2
+    elseif x == 3
+      print 3
+    elseif x == 4
+      print 4
+    else
+      print 999 - 0.333
+    end
+
+    if x not 0 and not 999    ;; weird but intuitive compare ifstatement
+      x = x + 1
+    end
+  end
+  y = "Hello world from alphalang..."           ;; variable assignment as a return value
+end                                             ;; then assigns that variable in the global scope
+
+my_func()
+
+print y                        ;; notice how this is accessible, prints 1
+
+def foo(w)
+  if w == true
+    print w
+  end
+end
+
+foo(true)
+
+y = [1, 2, 3, 4, 5]
+print y
+x = 6 + y
+print x
+z = x + 7
+print z
+y = [1, 2, 3, 4, 5]
+print y
+k = y - 1
+print k
+q = k - 2
+
+x = 1
+if x == 1
+  print q
+end

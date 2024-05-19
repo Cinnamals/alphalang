@@ -1,0 +1,24 @@
+stages:
+  - build
+  - install
+  - verify
+
+build:
+  stage: build
+  image: ruby:3.0
+  script:
+    - cd project
+    - gem build alphalang.gemspec
+
+install:
+  stage: install
+  image: ruby:3.0
+  script:
+    - gem install alphalang
+
+verify:
+  stage: verify
+  image: ruby:3.0
+  script:
+    - gem install alphalang
+    - alphalang -v

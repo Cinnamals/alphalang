@@ -1,0 +1,4 @@
+# Gemfile
+
+# Specify the Ruby version
+ruby '3.0.2'

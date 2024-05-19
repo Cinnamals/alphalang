@@ -1,0 +1,120 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require File.expand_path('../lib/alpha', __dir__)
+require_relative '../lib/rdparse'
+ALPHA_VER = '0.1.5'.freeze
+ABORT_ANSWERS = [' ', '', 'none', 'abort'].freeze
+LOCALES_PATH = File.join(__dir__, '../lib/locales')
+PROTECTED_LOCALES = ['.', '..', 'locale_template', 'default', 'default.old', 'en', 'sv', 'de', 'emoji'].freeze
+
+basic_error_msg = "Usage: alphalang [options] file.alpha\nUsage: alphalang -h for the help menu."
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = basic_error_msg
+
+  opts.on('-l', '--logger', 'Run program in a very verbose manner') do
+    options[:verbose] = true
+  end
+
+  opts.on('-v', '--verify', 'Run syntax verification. Does not require a file input.') do
+    options[:verify] = true
+  end
+
+  opts.on('--locale=LOCALE', 'Set the syntax locale for current program keywords.') do |locale|
+    options[:locale] = locale
+  end
+
+  opts.on('--setlocale=LOCALE', 'Set the default syntax locale for all program keywords.') do |new_locale|
+    options[:defaultlocale] = new_locale
+  end
+
+  opts.on('--createlocale', 'Creates a new locale file for all program keywords available.') do
+    options[:createlocale] = true
+  end
+
+  opts.on('--deletelocale', 'Deletes a locale file from your locales directory.') do
+    options[:deletelocale] = true
+  end
+
+  opts.on('--listlocales', 'Lists all available locale files from your locales directory.') do
+    options[:listlocales] = true
+  end
+
+  opts.on('--listlocale', 'Lists all keywords from a specific locale file from your locales directory.') do
+    options[:listlocale] = true
+  end
+
+  opts.on('-p', '--printtree', 'Prints the abstract syntax tree in a simple form.') do
+    options[:printtree] = true
+  end
+end.parse!
+
+verbose_flag = options[:verbose]
+verify_flag = options[:verify]
+language_flag = options[:locale]
+set_locale_flag = options[:defaultlocale]
+create_locale_flag = options[:createlocale]
+delete_locale_flag = options[:deletelocale]
+list_locales_flag = options[:listlocales]
+list_locale_flag = options[:listlocale]
+PRINT_TREE_FLAG = options[:printtree]
+TREE_ARRAY = []
+
+raise Errno::EBADR, "Don't use --logger and --printtree together." if PRINT_TREE_FLAG and verbose_flag
+
+if create_locale_flag
+  require_relative '../lib/locale_creator'
+  create_locale_file
+  return
+end
+
+if language_flag.is_a?(NilClass)
+  language_flag = 'default'
+end
+
+if !set_locale_flag.is_a?(NilClass)
+  unless ARGV.empty?
+    puts 'Flag for verification found. Ignoring input file.'
+    sleep 0.5
+  end
+  require_relative '../lib/locale_defaulter'
+  set_default_locale(set_locale_flag)
+  return
+end
+
+if delete_locale_flag
+  require_relative '../lib/locale_deleter'
+  delete_locale_file
+  return
+end
+
+if list_locales_flag
+  require_relative '../lib/locale_lister'
+  list_locale_files
+  return
+end
+
+if list_locale_flag
+  require_relative '../lib/locale_lister'
+  list_specific_locale_file
+  return
+end
+
+raise OptionParser::MissingArgument, "No file provided.
+Usage: alphalang my_file.alpha | alphalang -h" if ARGV.empty? unless verify_flag
+raise OptionParser::InvalidArgument, 'Too many files provided.
+Did you mean to use an --[option]? | alphalang -h' if ARGV.length > 1
+raise OptionParser::InvalidArgument, 'File must end with .alpha' unless verify_flag or ARGV[0].end_with?('.alpha')
+
+if verify_flag
+  unless ARGV.empty?
+    puts 'Flag for verification found. Ignoring input file.'
+    sleep 1
+  end
+  TEST_UNIT_ACTIVE = true
+  require_relative '../lib/tester/test_unit'
+else
+  TEST_UNIT_ACTIVE = false
+  LangParser.new(language_flag, verbose_flag).parse_file(ARGV[0])
+end
