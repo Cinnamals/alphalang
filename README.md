@@ -3,8 +3,6 @@
 # TDP019
 Construction of a computer language with Ruby as the engine. Created for the LiTH Course TDP019.
 
-<b>Status:</b> [![pipeline status](https://gitlab.liu.se/matre652/tdp019/badges/main/pipeline.svg)](https://gitlab.liu.se/matre652/tdp019/commits/main)
-
 ### Install <b>[alphalang]</b>
 ```shell
 gem install alphalang
@@ -13,7 +11,7 @@ alphalang -h
 
 ### Build from source
 ```shell
-git clone git@gitlab.liu.se:matre652/tdp019.git && cd tdp019/project
+git clone https://github.com/Cinnamals/alphalang.git && cd alphalang/project
 gem build alphalang.gemspec
 gem install alphalang-0.3.0.gem
 alphalang lib/tester/demo_emoji.alpha --locale=emoji
