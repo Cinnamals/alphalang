@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'alphalang'
-  spec.version       = '0.2.9'
+  spec.version       = '0.3.0'
   spec.authors       = ['mattias, victor']
   spec.email         = ['mattiasreuterskiold@gmail.com']
   spec.summary       = 'alphalanguage'

@@ -15,7 +15,7 @@ alphalang -h
 ```shell
 git clone git@gitlab.liu.se:matre652/tdp019.git && cd tdp019/project
 gem build alphalang.gemspec
-gem install alphalang-0.2.9.gem
+gem install alphalang-0.3.0.gem
 alphalang lib/tester/demo_emoji.alpha --locale=emoji
 alphalang demo.alpha
 ```
@@ -45,34 +45,36 @@ Well, with <b>[alphalang]</b>, you can change this to whatever you'd like. As lo
 ```bash
 .
 ├── dokument
+│   ├── bnf
+│   ├── dokumentation
+│   │   └── images
+│   ├── redovisning
+│   └── specifikationer
 ├── LICENSE
 ├── project
-│   ├── alphalang.gemspec
-│   ├── bin
-│   │   └── alphalang
-│   ├── demo.alpha
-│   ├── Gemfile
-│   ├── language-support
-│   │   └── alphalang-mode.el
-│   └── lib
+│   ├── alphalang-0.3.0.gem
+│   ├── alphalang.gemspec
+│   ├── bin
+│   │   └── alphalang
+│   ├── demo.alpha
+│   ├── Gemfile
+│   ├── language-support
+│   └── lib
 │       ├── alpha.rb
-│       ├── lang_creator.rb
+│       ├── error_handler.rb
+│       ├── locale_creator.rb
 │       ├── locale_defaulter.rb
 │       ├── locale_deleter.rb
 │       ├── locale_lister.rb
 │       ├── locales
-│       │   ├── de
-│       │   ├── default
-│       │   ├── en
-│       │   ├── locale_template
-│       │   └── sv
 │       ├── nodes
-│       │   ├── basenodes.rb
-│       │   ├── scopemanager.rb
-│       │   └── stmtnodes.rb
+│       │   ├── basenodes.rb
+│       │   ├── scopemanager.rb
+│       │   └── stmtnodes.rb
 │       ├── rdparse.rb
 │       └── tester
 │           ├── demo_de.alpha
+│           ├── demo_emoji.alpha
 │           ├── demo_sv.alpha
 │           ├── fibonacci.alpha
 │           └── test_unit.rb

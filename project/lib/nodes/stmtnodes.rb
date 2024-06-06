@@ -306,6 +306,9 @@ class PauseNode < Node
   end
 
   def evaluate
+    # TODO: Create an Error Handler class... Needs to use rdparses functions here for a more helpful msg.
+    raise SyntaxError, 'Pause needs a numeric argument.' unless @value.evaluate.is_a?(Numeric)
+
     @value = 0 if @value.evaluate.negative?
     create_tree_entry if PRINT_TREE_FLAG
     sleep @value.evaluate

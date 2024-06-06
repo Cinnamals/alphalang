@@ -23,7 +23,7 @@ def my_func()
       x = x + 1
     end
   end
-  y = "Hello world from alphalang..."           ;; variable assignment as a return value
+  y = 1                                         ;; variable assignment as a return value
 end                                             ;; then assigns that variable in the global scope
 
 my_func()

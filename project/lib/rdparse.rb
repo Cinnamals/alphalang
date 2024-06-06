@@ -8,6 +8,7 @@
 # 2014-02-16 New version that handles { false } blocks and :empty tokens.
 
 require 'logger'
+require_relative 'error_handler'
 
 class Rule
 
@@ -187,58 +188,6 @@ class Parser
     end # until
   end
 
-  def convert_regex_sensitive_token(token)
-      token = @token_list['end'] if token == :STOP    # fulhack pga :END påstods inte funka för länge sen
-      token = '[(]' if token == '('
-      token = '[)]' if token == ')'
-      token = '[+]' if token == '+'
-      token = '[-]' if token == '-'
-      token = '[*]' if token == '*'
-      token = '[/]' if token == '/'
-      token = "#{@token_list['(not|!)'].split('|')[0][1..]}" if token == :NOT
-      token = "#{@token_list['(and|&&)'].split('|')[0][1..]}" if token == :AND
-      token = "#{@token_list['(or|\|\|)'].split('|')[0][1..]}" if token == :OR
-      token
-  end
-
-  def translate_tokens_array(array)
-    result = []
-    array.each do |token|
-      token = convert_regex_sensitive_token(token)
-      result << token unless token.is_a?(Symbol)
-      result << @token_list[token.to_s.downcase] if token.is_a?(Symbol)
-    end
-    result
-  end
-
-  def find_surrounding_code(problem_pos)
-    tokens_before_problem = []
-    temp = problem_pos
-    while temp >= 0
-      tokens_before_problem << @tokens[temp]
-      temp -= 1
-    end
-    tokens_before_problem.reverse
-  end
-
-  def find_faulty_line
-    tokens_before_problem = find_surrounding_code(@max_pos - 1)
-    file_as_array_without_whitespaces = translate_tokens_array(tokens_before_problem)
-
-    pattern = file_as_array_without_whitespaces.join('\s*')
-    regex = Regexp.new(pattern)
-
-    cleaned_string = @file_string.gsub(/;;.*/, '')
-
-    match_data = regex.match(cleaned_string)
-    num_lines = match_data[0].count("\n") + 1
-
-    problem = @tokens[@max_pos]
-    problem = @token_list[problem.to_s.downcase] unless @token_list[problem.to_s.downcase].is_a?(NilClass)
-
-    raise ParseError, "There is a problem around line #{num_lines}. Found <#{problem}>"
-  end
-
   def parse(string)
     # First, split the string according to the "token" instructions given.
     # Afterwards @tokens contains all tokens that are to be parsed.
@@ -259,8 +208,7 @@ class Parser
         raise ParseError, 'Mismatched parenthesis! In Emacs: M-x check-parens RET'
       end
 
-      # raise ParseError, "Parse error. expected: '#{@expected.join(', ')}', found '#{@tokens[@max_pos]}'"
-      return find_faulty_line
+      return ErrorHandler.find_faulty_line(@max_pos, @file_string, @tokens, @token_list)
     end
     return result
   end

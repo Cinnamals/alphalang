@@ -24,11 +24,6 @@ class LangParser
 
       start :program do
         match(:comp_stmt)
-        match(:terminal)
-      end
-
-      rule :terminal do
-        match(/\n|;/)
       end
 
       rule :comp_stmt do
@@ -182,23 +177,19 @@ class LangParser
         match(ScopeManager.false_value) { |a| BoolNode.new(a) }
       end
 
-      rule :string do
-        match('"', :comp_string, '"') { |_, str, _| StringNode.new(str) }
-      end
+      # rule :string do
+      #   match('"', :comp_string, '"') { |_, str, _| StringNode.new(str) }
+      # end
 
-      # TODO: Figure out if  this is possible with char without messing too much with lexer
-      rule :comp_string do
-        match(:word, :comp_string) { |a, b| [a, b].flatten }
-        match(:word)
-      end
+      # # TODO: Figure out if  this is possible with char without messing too much with lexer
+      # rule :comp_string do
+      #   match(:word, :comp_string) { |a, b| [a, b].flatten }
+      #   match(:word)
+      # end
 
-      rule :word do
-        match(/\w/) { |m| m }
-        match(/[,]/) { |m| m } # stupid
-        match(/[.]/) { |m| m } # stupid
-        match(/(==|<=|>=|=|[+]|-|[\/])/) { |m| m }
-        # match(/\p{Punct}/) { |m| m } # Something fatal here. This eats PRINT and ==, everything.
-      end
+      # rule :word do
+      #   match(/\w/) { |m| m }
+      # end
 
       rule :call_member do
         match(:member, '(', :arg_list, ')') { |var, _, args, _| FuncCallNode.new(var, args) }

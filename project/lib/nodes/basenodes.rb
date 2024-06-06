@@ -45,21 +45,6 @@ class BoolNode < Node
   end
 end
 
-class StringNode < Node
-  def initialize(value)
-    if value.is_a?(String)
-      super
-    else
-      super(value.join(' '))
-    end
-  end
-
-  def evaluate
-    @value = @value.gsub(' ,', ',') # stupid
-    @value = @value.gsub(' .', '.') # stupid
-  end
-end
-
 ###################### Logic Gate Nodes
 
 class AndNode < Node
@@ -216,6 +201,49 @@ class ArrayNode < Node
     self
   end
 end
+
+# # See ArrayNode for a more complete Data Structure
+# class StringNode < Node
+#   def initialize(value)
+#     if value.is_a?(String)
+#       super
+#     else
+#       super(value.join(' '))
+#     end
+#   end
+
+#   def +(other)
+#     raise NotImplementedError, 'Addition is not implemented for Strings.'
+#   end
+
+#   def -(other)
+#     raise NotImplementedError, 'Subtraction is not implemented for Strings.'
+#   end
+
+#   def *(other)
+#     raise NotImplementedError, 'Multiplication is not implemented for Strings.'
+#   end
+
+#   def /(other)
+#     raise NotImplementedError, 'Division is not implemented for Strings.'
+#   end
+
+#   def to_i
+#     @value.to_i
+#   end
+
+#   def to_f
+#     @value.to_f
+#   end
+
+#   def contains?(other)
+#     return if @value.include?(other)
+#   end
+
+#   def evaluate
+#     self
+#   end
+# end
 
 ###################### Root Program Node
 
